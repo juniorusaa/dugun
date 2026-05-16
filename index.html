@@ -134,5 +134,52 @@ footer{background:#100808;padding:3rem 5%;text-align:center;color:var(--muted);}
   <p style="margin-top:0.8rem;">info@belladugun.com.tr | +90 212 555 0300</p>
   <p style="margin-top:1rem;font-size:0.8rem;">© 2025 Bella Düğün Organizasyon. Tüm hakları saklıdır.</p>
 </footer>
-</body>
+
+<section style="padding:5rem 5%;background:rgba(39,21,21,0.6);">
+  <div style="color:#d4a0b5;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;margin-bottom:0.6rem;">Planlama</div>
+  <div style="font-size:2rem;font-weight:300;letter-spacing:3px;text-transform:uppercase;margin-bottom:2.5rem;">Bütçe Hesapla</div>
+  <div style="max-width:700px;">
+    <div style="background:#271515;border-radius:1rem;padding:2rem;border:1px solid rgba(212,160,181,0.12);">
+      <p style="color:#9d8a8a;margin-bottom:1.5rem;font-size:0.9rem;">Seçtiğiniz hizmetlere göre tahmini düğün bütçenizi hesaplayın.</p>
+      <div id="budgetItems"></div>
+      <div style="border-top:1px solid rgba(212,160,181,0.15);margin-top:1.5rem;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:1rem;font-weight:600;">Tahmini Toplam Bütçe</div>
+        <div id="budgetTotal" style="font-size:2rem;font-weight:800;color:#e8c97a;">0 TL</div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+const budgetItems=[
+  {name:"Düğün Salonu",min:50000,max:200000},
+  {name:"Catering (kişi başı)",min:500,max:2000,unit:"kişi",qty:100},
+  {name:"Fotoğraf & Video",min:15000,max:50000},
+  {name:"Gelin & Damat Saçı/Makyajı",min:5000,max:20000},
+  {name:"Çiçek & Dekorasyon",min:15000,max:80000},
+  {name:"Müzik / DJ",min:5000,max:30000},
+  {name:"Gelinlik & Damatlık",min:10000,max:80000},
+  {name:"Davetiye & Kırtasiye",min:2000,max:8000},
+];
+const bi=document.getElementById('budgetItems');
+budgetItems.forEach((item,i)=>{
+  bi.innerHTML+=`<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.8rem;padding:0.8rem;background:rgba(255,255,255,0.02);border-radius:0.5rem;">
+    <input type="checkbox" id="bi${i}" checked onchange="updateBudget()" style="accent-color:#d4a0b5;width:16px;height:16px;">
+    <label for="bi${i}" style="flex:1;font-size:0.88rem;cursor:pointer;">${item.name}</label>
+    <select onchange="updateBudget()" data-idx="${i}" style="background:rgba(255,255,255,0.04);border:1px solid rgba(212,160,181,0.2);border-radius:0.4rem;padding:0.4rem 0.8rem;color:#f5f0f8;font-size:0.82rem;outline:none;">
+      <option value="${item.min}">Ekonomik — ${item.min.toLocaleString('tr-TR')} TL</option>
+      <option value="${Math.round((item.min+item.max)/2)}" selected>Orta — ${Math.round((item.min+item.max)/2).toLocaleString('tr-TR')} TL</option>
+      <option value="${item.max}">Lüks — ${item.max.toLocaleString('tr-TR')} TL</option>
+    </select>
+  </div>`;
+});
+function updateBudget(){
+  let total=0;
+  document.querySelectorAll('#budgetItems input[type=checkbox]').forEach((cb,i)=>{
+    if(cb.checked){const sel=document.querySelector(`[data-idx="${i}"]`);total+=+sel.value;}
+  });
+  document.getElementById('budgetTotal').textContent=total.toLocaleString('tr-TR')+' TL';
+}
+updateBudget();
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}});});
+</script></body>
 </html>
